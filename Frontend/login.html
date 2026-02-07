@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+</head>
+<body>
+  <h2>Login</h2>
+
+  <input id="email" placeholder="Email" />
+  <input id="password" type="password" placeholder="Password" />
+  <button onclick="login()">Login</button>
+
+  <h3>Register</h3>
+  <input id="remail" placeholder="Email" />
+  <input id="rpassword" type="password" placeholder="Password" />
+  <button onclick="register()">Register</button>
+
+  <script>
+    function login() {
+      fetch("http://localhost:3500/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.value,
+          password: password.value,
+        }),
+      })
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.token) {
+            localStorage.setItem("token", d.token);
+            location.href = "homepage.html";
+          } else {
+            alert("Login failed");
+          }
+        });
+    }
+
+    function register() {
+      fetch("http://localhost:3500/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: remail.value,
+          password: rpassword.value,
+        }),
+      })
+        .then((r) => r.json())
+        .then(() => alert("Registered! Now login."));
+    }
+  </script>
+</body>
+</html>

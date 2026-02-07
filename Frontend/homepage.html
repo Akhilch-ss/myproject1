@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Homepage</title>
+</head>
+<body>
+  <h2>Recipes</h2>
+
+  <input id="search" placeholder="Search..." onkeyup="load()" />
+  <button onclick="add()">Add Recipe</button>
+  <button onclick="logout()">Logout</button>
+
+  <div id="list"></div>
+
+  <script>
+    if (!localStorage.token) location.href = "login.html";
+
+    function logout() {
+      localStorage.clear();
+      location.href = "login.html";
+    }
+
+    function add() {
+      location.href = "add-receipe.html";
+    }
+
+    function load() {
+      fetch("http://localhost:3500/receipes")
+        .then((r) => r.json())
+        .then((data) => {
+          list.innerHTML = "";
+          data
+            .filter((r) =>
+              r.title.toLowerCase().includes(search.value.toLowerCase())
+            )
+            .forEach((r) => {
+              list.innerHTML += `
+                <div onclick="openR(${r.id})">
+                  <h3>${r.title}</h3>
+                  <p>by ${r.user}</p>
+                </div>
+              `;
+            });
+        });
+    }
+
+    function openR(id) {
+      location.href = "receipe.html?id=" + id;
+    }
+
+    load();
+  </script>
+</body>
+</html>
